@@ -16,7 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from arduino.views import SoundSensorView, TemperatureSensorView
+from django.http import HttpResponse
 
 urlpatterns = [
+    path("", lambda request: HttpResponse("Smart Beehive Backend")),
     path("admin/", admin.site.urls),
+    path("arduino/sound/", SoundSensorView.as_view(), name="sound"),
+    path("arduino/temp/", TemperatureSensorView.as_view(), name="temperature"),
 ]
