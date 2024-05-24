@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.pagination import PageNumberPagination
 from datetime import datetime
 
 from .serializers import SoundSensorSerializer, TemperatureSensorSerializer
@@ -8,9 +9,11 @@ from .models import SoundSensor, TemperatureSensor
 
 class SoundSensorView(APIView):
     def get(self, request):
+        paginator = PageNumberPagination()
         sound = SoundSensor.objects.all()
-        serializer = SoundSensorSerializer(sound, many=True)
-        return Response(serializer.data)
+        result_page = paginator.paginate_queryset(sound, request)
+        serializer = SoundSensorSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
     
     def post(self, request):
         #serializer = SoundSensorSerializer(data=request.data)
@@ -30,9 +33,11 @@ class SoundSensorView(APIView):
         
 class TemperatureSensorView(APIView):
     def get(self, request):
+        paginator = PageNumberPagination()
         temperature = TemperatureSensor.objects.all()
-        serializer = TemperatureSensorSerializer(temperature, many=True)    
-        return Response(serializer.data)
+        result_page = paginator.paginate_queryset(temperature, request)
+        serializer = TemperatureSensorSerializer(result_page, many=True)    
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
         #serializer = TemperatureSensorSerializer(data=request.data)
