@@ -15,4 +15,3 @@ class TemperatureSensor(models.Model):
     nitrogen_dioxide = models.FloatField()
     recorded_at = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
-    

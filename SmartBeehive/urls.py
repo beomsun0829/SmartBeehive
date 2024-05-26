@@ -22,5 +22,4 @@ urlpatterns = [
     path("", lambda request: HttpResponse("Smart Beehive Backend")),
     path("admin/", admin.site.urls),
     path("arduino/", include('arduino.urls')),
-    path("frontend/", include('frontend.urls')),
 ]

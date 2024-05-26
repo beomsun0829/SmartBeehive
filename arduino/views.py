@@ -10,7 +10,7 @@ from .models import SoundSensor, TemperatureSensor
 class SoundSensorView(APIView):
     def get(self, request):
         paginator = PageNumberPagination()
-        sound = SoundSensor.objects.all()
+        sound = SoundSensor.objects.all().order_by("-id")
         result_page = paginator.paginate_queryset(sound, request)
         serializer = SoundSensorSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
@@ -34,7 +34,7 @@ class SoundSensorView(APIView):
 class TemperatureSensorView(APIView):
     def get(self, request):
         paginator = PageNumberPagination()
-        temperature = TemperatureSensor.objects.all()
+        temperature = TemperatureSensor.objects.all().order_by("-id")
         result_page = paginator.paginate_queryset(temperature, request)
         serializer = TemperatureSensorSerializer(result_page, many=True)    
         return paginator.get_paginated_response(serializer.data)
