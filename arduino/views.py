@@ -8,6 +8,7 @@ from django.db.models.functions import TruncMinute
 
 from .serializers import SoundSensorSerializer, TemperatureSensorSerializer
 from .models import SoundSensor, TemperatureSensor
+from .utils import calculate_q1_q3_iqr
 
 class SoundSensorView(APIView):
     def get(self, request):
@@ -21,6 +22,18 @@ class SoundSensorView(APIView):
         ).order_by('-interval')
 
         aggregated_sound = list(sound)
+
+        # Extract avg_sound values for Q1, Q3, and IQR calculation
+        avg_sound_values = [entry['avg_sound'] for entry in aggregated_sound]
+        
+        if avg_sound_values:
+            q1, q3, iqr = calculate_q1_q3_iqr(avg_sound_values)
+            anomaly_threshold = q3 + 1.5 * iqr
+
+            # Mark anomalies
+            for entry in aggregated_sound:
+                entry['is_anomaly'] = entry['avg_sound'] > anomaly_threshold
+
         result_page = paginator.paginate_queryset(aggregated_sound, request)
         
         return paginator.get_paginated_response(result_page)
@@ -47,6 +60,18 @@ class TemperatureSensorView(APIView):
         ).order_by('-interval')
 
         aggregated_temperature = list(temperature)
+
+        # Extract avg_temperature values for Q1, Q3, and IQR calculation
+        avg_temperature_values = [entry['avg_temperature'] for entry in aggregated_temperature]
+        
+        if avg_temperature_values:
+            q1, q3, iqr = calculate_q1_q3_iqr(avg_temperature_values)
+            anomaly_threshold = q3 + 1.5 * iqr
+
+            # Mark anomalies
+            for entry in aggregated_temperature:
+                entry['is_anomaly'] = entry['avg_temperature'] > anomaly_threshold
+
         result_page = paginator.paginate_queryset(aggregated_temperature, request)
         
         return paginator.get_paginated_response(result_page)
