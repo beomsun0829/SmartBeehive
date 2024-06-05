@@ -15,13 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from arduino.views import SoundSensorView, TemperatureSensorView
+from django.urls import path, include
 from django.http import HttpResponse
 
 urlpatterns = [
     path("", lambda request: HttpResponse("Smart Beehive Backend")),
     path("admin/", admin.site.urls),
-    path("arduino/sound/", SoundSensorView.as_view(), name="sound"),
-    path("arduino/temp/", TemperatureSensorView.as_view(), name="temperature"),
+    path("arduino/", include('arduino.urls')),
 ]
