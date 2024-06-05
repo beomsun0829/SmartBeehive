@@ -134,11 +134,10 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-<<<<<<< HEAD
 
 # HOSTS
 ALLOWED_HOSTS = ["*"]
-=======
+
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
@@ -149,4 +148,3 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 1440,
 }
->>>>>>> 45e195221d5d0719667207c11f398398b5f3d057
