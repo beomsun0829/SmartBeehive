@@ -14,6 +14,10 @@ class SoundSensorView(APIView):
     def get(self, request):
         paginator = PageNumberPagination()
         
+        pages = request.query_params.get('pages', None)
+        if pages:
+            paginator.page_size = pages
+        
         sound = SoundSensor.objects.annotate(
             interval=TruncMinute('recorded_at')
         ).values('interval').annotate(
@@ -48,6 +52,10 @@ class SoundSensorView(APIView):
 class TemperatureSensorView(APIView):
     def get(self, request):
         paginator = PageNumberPagination()
+        
+        pages = request.query_params.get('pages', None)
+        if pages:
+            paginator.page_size = pages
         
         temperature = TemperatureSensor.objects.annotate(
             interval=TruncMinute('recorded_at')
